@@ -37,14 +37,15 @@ button:hover {
     width: 40%;
     margin: auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     background-color: #eee;
     border-radius: 10px;
 }
 
 .input-container {
-    width: 100%;
-    margin: 1rem 2rem;
+    width: 85%;
+    margin: 1rem auto;
     position: relative;
 }
 
@@ -77,4 +78,15 @@ button:hover {
 .add-button:hover {
     background-color: #4fd214;
     color: #eee;
+}
+
+.item-container {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todo-item {
+    width: 100%;
 }
