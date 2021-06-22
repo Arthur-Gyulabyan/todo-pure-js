@@ -10,11 +10,71 @@ body {
     line-height: 1.2;
 }
 
+input {
+    outline: none;
+    font-family: inherit;
+}
+
+button {
+    outline: none;
+    border: none;
+    font-family: inherit;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+::placeholder {
+    color: #ccc;
+}
+
 .heading {
     text-align: center;
 }
 
 .flex-container {
+    width: 40%;
+    margin: auto;
     display: flex;
     justify-content: center;
+    background-color: #eee;
+    border-radius: 10px;
+}
+
+.input-container {
+    width: 100%;
+    margin: 1rem 2rem;
+    position: relative;
+}
+
+.todo-input {
+    width: 100%;
+    padding: 0.3rem 1rem;
+    font-size: 1.3rem;
+    border: 1px solid #4fd214;
+    border-radius: 26px;
+}
+
+.todo-input:focus {
+    border-color: #4fd214;
+}
+
+.add-button {
+    background-color: #eee;
+    font-size: 1.3rem;
+    color: #4fd214;
+    border: 1px solid #4fd214;
+    border-radius: 26px;
+    padding: 0.3rem 1rem;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    z-index: 10;
+    transition: 0.3s;
+}
+
+.add-button:hover {
+    background-color: #4fd214;
+    color: #eee;
 }
