@@ -10,3 +10,11 @@ body {
     line-height: 1.2;
 }
 
+.heading {
+    text-align: center;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+}
