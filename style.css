@@ -88,5 +88,36 @@ button:hover {
 }
 
 .todo-item {
+    background-color: #ddd;
     width: 100%;
+    padding: 0.7rem 1.5rem;
+    border-radius: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.todo-item__buttons button {
+    background-color: #ddd;
+}
+
+.todo-item__buttons button:hover i {
+    opacity: 0.5;
+}
+
+.todo-item__buttons button i{
+    background-color: #ddd;
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.todo-item__buttons--done {
+    color: #4fd214;
+}
+
+.todo-item__buttons--edit {
+    color: #10a3e7;
+}
+
+.todo-item__buttons--delete {
+    color: #f51a34;
 }
