@@ -1,8 +1,12 @@
+'use strict';
+
 const input = document.querySelector('#todo-input');
 const addBtn = document.querySelector('#add-btn');
 const itemContainer = document.querySelector('#container');
 
 class TodoList {
+    static idCounter = 0;
+
     constructor() {
         this.itemCount = 0;
     }
@@ -13,7 +17,7 @@ class TodoList {
         }
 
         const html = `
-            <div class="todo-item">
+            <div class="todo-item" id="item-${TodoList.idCounter}">
               <div class="todo-item__text">
                 <span class="todo-item-description">${input.value}</span>
               </div>
@@ -24,13 +28,38 @@ class TodoList {
                 <button class="todo-item__buttons--delete"><i class="fad fa-trash-alt"></i></button>
               </div>
              </div>
-        `;
+`;
 
         itemContainer.insertAdjacentHTML('beforeend', html);
         input.value = '';
+
+        this.addButtonEvents();
+        this.updateData();
     }
+
+    deleteItem(item) {
+        // const target = event.target.parentElement.parentElement.parentElement;
+
+        item.remove();
+    }
+
+    addButtonEvents() {
+        const currentItem = document.querySelector(`#item-${TodoList.idCounter}`);
+        const currentItemDeleteBtn = currentItem.children[1].children[2];
+
+        currentItemDeleteBtn.addEventListener('click', () => {
+            this.deleteItem(currentItem);
+        });
+    }
+
+    updateData() {
+        TodoList.idCounter++;
+    }
+
 }
 
 const todo = new TodoList();
 
-addBtn.addEventListener('click', todo.addItem);
+addBtn.addEventListener('click', () => {
+    todo.addItem();
+});
