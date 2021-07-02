@@ -38,17 +38,49 @@ class TodoList {
     }
 
     deleteItem(item) {
-        // const target = event.target.parentElement.parentElement.parentElement;
-
         item.remove();
+    }
+
+    editItem(itemText, editBtn) {
+        const itemTextValue = itemText.textContent;
+        console.log(itemText);
+
+        itemText.style.display = 'none';
+        const input = document.createElement('input');
+        input.value = itemTextValue;
+        input.classList.add('edit-input');
+        input.setAttribute('type', 'text');
+
+        itemText.parentElement.appendChild(input);
+        input.focus();
+
+        input.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                itemText.textContent = input.value;
+                itemText.style.display = 'inline-block';
+                input.remove();
+                editBtn.disabled = false;
+            }
+        });
+
+
     }
 
     addButtonEvents() {
         const currentItem = document.querySelector(`#item-${TodoList.idCounter}`);
+        const currentItemText = currentItem.children[0].firstElementChild;
+
+        const currentItemEditBtn = currentItem.children[1].children[1];
         const currentItemDeleteBtn = currentItem.children[1].children[2];
 
         currentItemDeleteBtn.addEventListener('click', () => {
             this.deleteItem(currentItem);
+        });
+
+        currentItemEditBtn.addEventListener('click', (event) => {
+           this.editItem(currentItemText, currentItemEditBtn);
+           currentItemEditBtn.disabled = true;
+            console.log(currentItemEditBtn);
         });
     }
 
