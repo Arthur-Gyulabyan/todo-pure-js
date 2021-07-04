@@ -61,7 +61,7 @@ class TodoList {
         input.focus();
 
         input.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) TodoList.spanFromInput(itemText, editBtn ,input);
+            if (event.keyCode === 13) TodoList.spanFromInput(itemText, editBtn, input);
         });
 
         // Here I needed named function to be able to remove the listener.
@@ -73,10 +73,20 @@ class TodoList {
         });
     }
 
+    completeItem(item, itemText, btn) {
+        item.classList.toggle('completed-item');
+        itemText.classList.toggle('completed-text');
+
+        item.classList.contains('completed-item') ?
+            btn.firstElementChild.setAttribute('class', 'fad fa-check-double') :
+            btn.firstElementChild.setAttribute('class', 'fad fa-check');
+    }
+
     addButtonEvents() {
         const currentItem = document.querySelector(`#item-${TodoList.idCounter}`);
         const currentItemText = currentItem.children[0].firstElementChild;
 
+        const currentItemCompleteBtn = currentItem.children[1].children[0];
         const currentItemEditBtn = currentItem.children[1].children[1];
         const currentItemDeleteBtn = currentItem.children[1].children[2];
 
@@ -85,8 +95,12 @@ class TodoList {
         });
 
         currentItemEditBtn.addEventListener('click', (event) => {
-           this.editItem(currentItemText, currentItemEditBtn);
-           currentItemEditBtn.disabled = true;
+            this.editItem(currentItemText, currentItemEditBtn);
+            currentItemEditBtn.disabled = true;
+        });
+
+        currentItemCompleteBtn.addEventListener('click', (event) => {
+            this.completeItem(currentItem, currentItemText, currentItemCompleteBtn);
         });
     }
 
