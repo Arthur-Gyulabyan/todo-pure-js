@@ -141,3 +141,11 @@ button:hover {
     padding: 0.3rem 0.6rem;
     border-radius: 0.5rem;
 }
+
+.completed-item {
+    box-shadow: inset 0 0 10px 0 #4fd214;
+}
+
+.completed-text {
+    text-decoration: line-through;
+}
