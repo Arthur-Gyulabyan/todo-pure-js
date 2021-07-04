@@ -9,6 +9,7 @@ class TodoList {
 
     constructor() {
         this.itemCount = 0;
+        this.data = [];
     }
 
     static spanFromInput(span, btn, input) {
@@ -35,10 +36,14 @@ class TodoList {
                 <button class="todo-item__buttons--delete"><i class="fad fa-trash-alt"></i></button>
               </div>
              </div>
-`;
+        `;
+
+        this.addItemData(input.value);
 
         itemContainer.insertAdjacentHTML('beforeend', html);
         input.value = '';
+
+        this.itemCount++;
 
         this.addButtonEvents();
         this.updateData();
@@ -46,6 +51,7 @@ class TodoList {
 
     deleteItem(item) {
         item.remove();
+        this.itemCount--;
     }
 
     editItem(itemText, editBtn) {
@@ -106,6 +112,16 @@ class TodoList {
 
     updateData() {
         TodoList.idCounter++;
+    }
+
+    addItemData(description) {
+        const item = {};
+
+        item.id = TodoList.idCounter;
+        item.description = description;
+        item.isActive = false;
+
+        this.data.push(item);
     }
 
 }
