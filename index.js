@@ -11,6 +11,13 @@ class TodoList {
         this.itemCount = 0;
     }
 
+    static spanFromInput(span, btn, input) {
+        span.textContent = input.value;
+        span.style.display = 'inline-block';
+        input.remove();
+        btn.disabled = false;
+    }
+
     addItem() {
         if (input.value === '') {
             return;
@@ -43,7 +50,6 @@ class TodoList {
 
     editItem(itemText, editBtn) {
         const itemTextValue = itemText.textContent;
-        console.log(itemText);
 
         itemText.style.display = 'none';
         const input = document.createElement('input');
@@ -55,15 +61,16 @@ class TodoList {
         input.focus();
 
         input.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) {
-                itemText.textContent = input.value;
-                itemText.style.display = 'inline-block';
-                input.remove();
-                editBtn.disabled = false;
-            }
+            if (event.keyCode === 13) TodoList.spanFromInput(itemText, editBtn ,input);
         });
 
-
+        // Here I needed named function to be able to remove the listener.
+        window.addEventListener('click', function callback(event) {
+            if (event.target !== input && event.target !== editBtn.firstElementChild) {
+                TodoList.spanFromInput(itemText, editBtn, input);
+                window.removeEventListener('click', callback);
+            }
+        });
     }
 
     addButtonEvents() {
@@ -80,7 +87,6 @@ class TodoList {
         currentItemEditBtn.addEventListener('click', (event) => {
            this.editItem(currentItemText, currentItemEditBtn);
            currentItemEditBtn.disabled = true;
-            console.log(currentItemEditBtn);
         });
     }
 
