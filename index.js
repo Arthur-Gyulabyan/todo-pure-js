@@ -3,13 +3,14 @@
 const input = document.querySelector('#todo-input');
 const addBtn = document.querySelector('#add-btn');
 const itemContainer = document.querySelector('#container');
+const storage = window.localStorage;
 
 class TodoList {
-    static idCounter = 0;
+    static idCounter = Number(storage.getItem('idCounter')) || 0;
 
     constructor() {
-        this.itemCount = 0;
-        this.data = [];
+        this.data = JSON.parse(storage.getItem('data')) || [];
+        this.itemCount = this.data.length || 0;
     }
 
     static spanFromInput(span, btn, input) {
@@ -17,6 +18,27 @@ class TodoList {
         span.style.display = 'inline-block';
         input.remove();
         btn.disabled = false;
+    }
+
+    init() {
+        this.data.forEach(item => {
+            const html = `
+            <div class="todo-item ${item.isActive ? 'completed-item' : ''}" id="item-${item.id}">
+              <div class="todo-item__text">
+                <span class="todo-item-description  ${item.isActive ? 'completed-text' : ''}">${item.description}</span>
+              </div>
+
+              <div class="todo-item__buttons">
+                <button class="todo-item__buttons--done"><i class="fad fa-check"></i></button>
+                <button class="todo-item__buttons--edit"><i class="fad fa-edit"></i></button>
+                <button class="todo-item__buttons--delete"><i class="fad fa-trash-alt"></i></button>
+              </div>
+             </div>
+        `;
+
+            itemContainer.insertAdjacentHTML('beforeend', html);
+            this.addButtonEvents(item.id);
+        });
     }
 
     addItem() {
@@ -38,19 +60,27 @@ class TodoList {
              </div>
         `;
 
-
-        itemContainer.insertAdjacentHTML('beforeend', html);
-        this.addButtonEvents();
-        this.addItemData(input.value);
-        input.value = '';
-
         this.itemCount++;
 
+        itemContainer.insertAdjacentHTML('beforeend', html);
+
+        this.addButtonEvents(TodoList.idCounter);
+        this.addItemData(input.value);
+
+        input.value = '';
     }
 
     deleteItem(item) {
         item.remove();
+
+        const id = Number(item.id[item.id.length - 1]);
+        const itemDataIndex = this.data.findIndex(item => item.id === id);
+        this.data.splice(itemDataIndex, 1);
+
         this.itemCount--;
+
+        storage.setItem('data', JSON.stringify(todo.data));
+        storage.setItem('itemCount', `${this.itemCount}`);
     }
 
     editItem(itemText, editBtn) {
@@ -99,8 +129,8 @@ class TodoList {
             btn.firstElementChild.setAttribute('class', 'fad fa-check');
     }
 
-    addButtonEvents() {
-        const currentItem = document.querySelector(`#item-${TodoList.idCounter}`);
+    addButtonEvents(id) {
+        const currentItem = document.querySelector(`#item-${id}`);
         const currentItemText = currentItem.children[0].firstElementChild;
 
         const currentItemCompleteBtn = currentItem.children[1].children[0];
@@ -124,6 +154,7 @@ class TodoList {
     updateItemData(id, text) {
         const itemData = this.data.find(item => item.id === id);
         itemData.description = text;
+        storage.setItem('data', JSON.stringify(todo.data));
     }
 
     addItemData(description) {
@@ -135,6 +166,10 @@ class TodoList {
 
         this.data.push(item);
         TodoList.idCounter++;
+
+        storage.setItem('data', JSON.stringify(todo.data));
+        storage.setItem('idCounter', `${TodoList.idCounter}`);
+        storage.setItem('itemCount', `${this.itemCount}`);
     }
 
 }
@@ -144,3 +179,8 @@ const todo = new TodoList();
 addBtn.addEventListener('click', () => {
     todo.addItem();
 });
+
+window.addEventListener('load', () => {
+    todo.init();
+});
+
