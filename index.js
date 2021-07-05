@@ -38,15 +38,14 @@ class TodoList {
              </div>
         `;
 
-        this.addItemData(input.value);
 
         itemContainer.insertAdjacentHTML('beforeend', html);
+        this.addButtonEvents();
+        this.addItemData(input.value);
         input.value = '';
 
         this.itemCount++;
 
-        this.addButtonEvents();
-        this.updateData();
     }
 
     deleteItem(item) {
@@ -55,7 +54,9 @@ class TodoList {
     }
 
     editItem(itemText, editBtn) {
+        const item = itemText.parentElement.parentElement;
         const itemTextValue = itemText.textContent;
+        const id = Number(item.id[item.id.length - 1]);
 
         itemText.style.display = 'none';
         const input = document.createElement('input');
@@ -67,21 +68,31 @@ class TodoList {
         input.focus();
 
         input.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) TodoList.spanFromInput(itemText, editBtn, input);
-        });
-
-        // Here I needed named function to be able to remove the listener.
-        window.addEventListener('click', function callback(event) {
-            if (event.target !== input && event.target !== editBtn.firstElementChild) {
+            if (event.keyCode === 13) {
                 TodoList.spanFromInput(itemText, editBtn, input);
-                window.removeEventListener('click', callback);
+                this.updateItemData(id, input.value);
             }
         });
+
+        const listener = (event) => {
+            if (event.target !== input && event.target !== editBtn.firstElementChild) {
+                TodoList.spanFromInput(itemText, editBtn, input);
+                this.updateItemData(id, input.value);
+                window.removeEventListener('click', listener);
+            }
+        };
+
+        // Here I needed named function to be able to remove the listener.
+        window.addEventListener('click', listener);
     }
 
     completeItem(item, itemText, btn) {
         item.classList.toggle('completed-item');
         itemText.classList.toggle('completed-text');
+
+        const id = Number(item.id[item.id.length - 1]);
+        const itemData = this.data.find(item => item.id === id);
+        itemData.isActive = !itemData.isActive;
 
         item.classList.contains('completed-item') ?
             btn.firstElementChild.setAttribute('class', 'fad fa-check-double') :
@@ -110,8 +121,9 @@ class TodoList {
         });
     }
 
-    updateData() {
-        TodoList.idCounter++;
+    updateItemData(id, text) {
+        const itemData = this.data.find(item => item.id === id);
+        itemData.description = text;
     }
 
     addItemData(description) {
@@ -122,6 +134,7 @@ class TodoList {
         item.isActive = false;
 
         this.data.push(item);
+        TodoList.idCounter++;
     }
 
 }
