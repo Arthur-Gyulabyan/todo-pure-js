@@ -23,13 +23,13 @@ class TodoList {
     init() {
         this.data.forEach(item => {
             const html = `
-            <div class="todo-item ${item.isActive ? 'completed-item' : ''}" id="item-${item.id}">
+            <div class="todo-item ${item.isCompleted ? 'completed-item' : ''}" id="item-${item.id}">
               <div class="todo-item__text">
-                <span class="todo-item-description ${item.isActive ? 'completed-text' : ''}">${item.description}</span>
+                <span class="todo-item-description ${item.isCompleted ? 'completed-text' : ''}">${item.description}</span>
               </div>
 
               <div class="todo-item__buttons">
-                <button class="todo-item__buttons--done"><i class="${item.isActive ? 'fad fa-check-double' : 'fad fa-check'}"></i></button>
+                <button class="todo-item__buttons--done"><i class="${item.isCompleted ? 'fad fa-check-double' : 'fad fa-check'}"></i></button>
                 <button class="todo-item__buttons--edit"><i class="fad fa-edit"></i></button>
                 <button class="todo-item__buttons--delete"><i class="fad fa-trash-alt"></i></button>
               </div>
@@ -122,7 +122,7 @@ class TodoList {
 
         const id = Number(item.id.match(/\d+/g)[0]);
         const itemData = this.data.find(item => item.id === id);
-        itemData.isActive = !itemData.isActive;
+        itemData.isCompleted = !itemData.isCompleted;
         storage.setItem('data', JSON.stringify(todo.data));
 
         item.classList.contains('completed-item') ?
@@ -163,7 +163,7 @@ class TodoList {
 
         item.id = TodoList.idCounter;
         item.description = description;
-        item.isActive = false;
+        item.isCompleted = false;
 
         this.data.push(item);
         TodoList.idCounter++;
