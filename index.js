@@ -25,11 +25,11 @@ class TodoList {
             const html = `
             <div class="todo-item ${item.isActive ? 'completed-item' : ''}" id="item-${item.id}">
               <div class="todo-item__text">
-                <span class="todo-item-description  ${item.isActive ? 'completed-text' : ''}">${item.description}</span>
+                <span class="todo-item-description ${item.isActive ? 'completed-text' : ''}">${item.description}</span>
               </div>
 
               <div class="todo-item__buttons">
-                <button class="todo-item__buttons--done"><i class="fad fa-check"></i></button>
+                <button class="todo-item__buttons--done"><i class="${item.isActive ? 'fad fa-check-double' : 'fad fa-check'}"></i></button>
                 <button class="todo-item__buttons--edit"><i class="fad fa-edit"></i></button>
                 <button class="todo-item__buttons--delete"><i class="fad fa-trash-alt"></i></button>
               </div>
@@ -73,7 +73,7 @@ class TodoList {
     deleteItem(item) {
         item.remove();
 
-        const id = Number(item.id[item.id.length - 1]);
+        const id = Number(item.id.match(/\d+/g)[0]);
         const itemDataIndex = this.data.findIndex(item => item.id === id);
         this.data.splice(itemDataIndex, 1);
 
@@ -86,7 +86,7 @@ class TodoList {
     editItem(itemText, editBtn) {
         const item = itemText.parentElement.parentElement;
         const itemTextValue = itemText.textContent;
-        const id = Number(item.id[item.id.length - 1]);
+        const id = Number(item.id.match(/\d+/g)[0]);
 
         itemText.style.display = 'none';
         const input = document.createElement('input');
@@ -120,9 +120,10 @@ class TodoList {
         item.classList.toggle('completed-item');
         itemText.classList.toggle('completed-text');
 
-        const id = Number(item.id[item.id.length - 1]);
+        const id = Number(item.id.match(/\d+/g)[0]);
         const itemData = this.data.find(item => item.id === id);
         itemData.isActive = !itemData.isActive;
+        storage.setItem('data', JSON.stringify(todo.data));
 
         item.classList.contains('completed-item') ?
             btn.firstElementChild.setAttribute('class', 'fad fa-check-double') :
